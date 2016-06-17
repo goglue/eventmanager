@@ -17,7 +17,7 @@ func TestMemory_Attach(t *testing.T) {
 		t.Fail()
 	}
 
-	if (memory.storage["test"][0] != attachable) {
+	if memory.storage["test"][0] != attachable {
 		t.Fail()
 	}
 }

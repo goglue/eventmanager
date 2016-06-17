@@ -5,6 +5,7 @@ import "testing"
 type subscriber struct {
 	t *testing.T
 }
+
 func (s *subscriber) Update(u interface{}) {
 	actual, ok := u.(int)
 	if !ok {

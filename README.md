@@ -1,4 +1,4 @@
-# Event manager library for GOLANG
+# Event manager library for GO
 
 [![Build Status](https://travis-ci.org/goglue/event-manager.svg?branch=master)](https://travis-ci.org/goglue/event-manager)
 
@@ -6,28 +6,40 @@ This library implements an event manager for common usages
 
 ### How to use
 
-The subscriber should implement the following interface
+#### Interfaces
+- The subscriber interface
 
 ```go
+type Subscriber interface {
+    Update(interface{})
+}
+
+// Example for a subscriber
 type Subscriber int
 
 func (s Subscriber) Update(eventState interface{}) {
-    println("I have recieved the event:")
-    println(fmt.Sprintf("#%v", eventState))
+    // Do whatever with the event-state you've received
 }
 ```
 
-Attaching a subscriber
+- Recorder: After dispatching an event a single snapshot will be taken for th
+
+```go
+type Recorder interface{
+    Snapshot(eventName string, eventState interface{}, on time.Time)
+}
+```
+
+#### Example
 
 ```go
 memory := NewMemoryStorage()
 dispatcher := NewDispatcher()
-var sub Subscriber = 1
+
+var subscriber Subscriber = 1
 
 eventManager := NewEventManager(memory, dispatcher, nil)
-
-eventManager.Attach("randomEventName", sub)
-
+eventManager.Attach("randomEventName", subscriber)
 eventManager.Dispatch("randomEventName", "any value can be dispatched")
 ```
 
