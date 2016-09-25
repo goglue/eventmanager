@@ -1,6 +1,6 @@
 # Event manager library for GO
 
-[![Build Status](https://travis-ci.org/goglue/event-manager.svg?branch=master)](https://travis-ci.org/goglue/event-manager)
+[![Build Status](https://travis-ci.org/goglue/eventmanager.svg?branch=master)](https://travis-ci.org/goglue/eventmanager)
 
 This library implements an event manager for common usages
 
