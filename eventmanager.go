@@ -35,13 +35,20 @@ func (e *EventManager) DeAttach(eventName string, subscriber Subscriber) {
 
 // Record the current event
 func record(r Recorder, eventName string, eventState interface{}) {
-	if nil != r {
-		r.SnapShot(eventName, eventState, time.Now())
-	}
+	r.SnapShot(eventName, eventState, time.Now())
+}
+
+type NilRecorder bool
+
+func (n *NilRecorder) SnapShot(string, interface{}, time.Time) {
+
 }
 
 // Factory method for the event manager
 func NewEventManager(storage Storage, dispatcher DispatcherContract, recorder Recorder) *EventManager {
+	if nil == recorder {
+		recorder = new(NilRecorder)
+	}
 	return &EventManager{
 		storage,
 		dispatcher,
