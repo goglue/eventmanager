@@ -3,17 +3,17 @@ package eventmanager
 type Dispatcher bool
 
 // Dispatches the event in sequential
-func (d *Dispatcher) Dispatch(eventName string, eventState interface{}, subscribers []Subscriber) {
+func (d *Dispatcher) Dispatch(eventName string, eventState []byte, subscribers []Subscriber) {
 	dispatch(subscribers, eventName, eventState, false)
 }
 
 // Dispatches the event in routines
-func (d *Dispatcher) GoDispatch(eventName string, eventState interface{}, subscribers []Subscriber) {
+func (d *Dispatcher) GoDispatch(eventName string, eventState []byte, subscribers []Subscriber) {
 	dispatch(subscribers, eventName, eventState, true)
 }
 
 // Dispatches the event across all the subscribers
-func dispatch(subscribers []Subscriber, eventName string, eventState interface{}, async bool) {
+func dispatch(subscribers []Subscriber, eventName string, eventState []byte, async bool) {
 	if async {
 		for _, subscriber := range subscribers {
 			go subscriber.Update(eventState)

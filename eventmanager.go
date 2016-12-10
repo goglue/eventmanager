@@ -15,14 +15,14 @@ func (e *EventManager) Attach(eventName string, sub Subscriber) {
 }
 
 // Dispatches the event across all the subscribers
-func (e *EventManager) Dispatch(eventName string, eventState interface{}) {
+func (e *EventManager) Dispatch(eventName string, eventState []byte) {
 	subscribers := e.Storage.Subscribers(eventName)
 	e.Dispatcher.Dispatch(eventName, eventState, subscribers)
 	record(e.Recorder, eventName, eventState)
 }
 
 // Dispatches the event across all the subscribers
-func (e *EventManager) GoDispatch(eventName string, eventState interface{}) {
+func (e *EventManager) GoDispatch(eventName string, eventState []byte) {
 	subscribers := e.Storage.Subscribers(eventName)
 	e.Dispatcher.GoDispatch(eventName, eventState, subscribers)
 	record(e.Recorder, eventName, eventState)
@@ -34,13 +34,13 @@ func (e *EventManager) DeAttach(eventName string, subscriber Subscriber) {
 }
 
 // Record the current event
-func record(r Recorder, eventName string, eventState interface{}) {
+func record(r Recorder, eventName string, eventState []byte) {
 	r.SnapShot(eventName, eventState, time.Now())
 }
 
 type NilRecorder bool
 
-func (n *NilRecorder) SnapShot(string, interface{}, time.Time) {
+func (n *NilRecorder) SnapShot(string, []byte, time.Time) {
 
 }
 

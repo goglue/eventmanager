@@ -4,7 +4,7 @@ import "testing"
 
 type test int
 
-func (t test) Update(interface{}) {}
+func (t test) Update([]byte) {}
 
 // Testing the attach method
 func TestMemory_Attach(t *testing.T) {

@@ -6,8 +6,8 @@ import (
 
 // Dispatcher interface
 type DispatcherContract interface {
-	Dispatch(eventName string, eventState interface{}, subscribers []Subscriber)
-	GoDispatch(eventName string, eventState interface{}, subscribers []Subscriber)
+	Dispatch(eventName string, eventState []byte, subscribers []Subscriber)
+	GoDispatch(eventName string, eventState []byte, subscribers []Subscriber)
 }
 
 // The storage interface
@@ -19,10 +19,10 @@ type Storage interface {
 
 // The recorder interface
 type Recorder interface {
-	SnapShot(eventName string, eventPayload interface{}, on time.Time)
+	SnapShot(eventName string, eventPayload []byte, on time.Time)
 }
 
 // The subscriber interface
 type Subscriber interface {
-	Update(interface{})
+	Update([]byte)
 }

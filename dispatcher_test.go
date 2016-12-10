@@ -1,23 +1,32 @@
 package eventmanager
 
-import "testing"
+import (
+	"bytes"
+	"encoding/gob"
+	"testing"
+)
 
 type subscriber struct {
 	t *testing.T
 }
 
-func (s *subscriber) Update(u interface{}) {
-	actual, ok := u.(int)
-	if !ok {
-		panic("something wrong")
-	}
+func (s *subscriber) Update(u []byte) {
+	buff := bytes.NewBuffer(u)
+	decoder := gob.NewDecoder(buff)
 
-	if actual != expected {
+	actual := new(testEventPayload)
+	decoder.Decode(actual)
+
+	if actual.X != expected.X {
 		s.t.Fail()
 	}
 }
 
-var expected int = 10
+type testEventPayload struct {
+	X int
+}
+
+var expected *testEventPayload
 
 // Testing the dispatch method
 func TestDispatcher_Dispatch(t *testing.T) {
@@ -25,5 +34,10 @@ func TestDispatcher_Dispatch(t *testing.T) {
 	subscribers := make([]Subscriber, 0)
 	subscribers = append(subscribers, &subscriber{t})
 
-	d.Dispatch("something", expected, subscribers)
+	expected = &testEventPayload{10}
+	var buff bytes.Buffer
+	enc := gob.NewEncoder(&buff)
+	enc.Encode(expected)
+
+	d.Dispatch("something", buff.Bytes(), subscribers)
 }

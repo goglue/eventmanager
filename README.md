@@ -11,13 +11,13 @@ This library implements an event manager for common usages
 
 ```go
 type Subscriber interface {
-    Update(interface{})
+    Update([]byte)
 }
 
 // Example for a subscriber
 type Subscriber int
 
-func (s Subscriber) Update(eventState interface{}) {
+func (s Subscriber) Update(eventState []byte) {
     // Do whatever with the event-state you've received
 }
 ```
@@ -26,25 +26,29 @@ func (s Subscriber) Update(eventState interface{}) {
 
 ```go
 type Recorder interface{
-    Snapshot(eventName string, eventState interface{}, on time.Time)
+    Snapshot(eventName string, eventState []byte, on time.Time)
 }
 ```
 
 #### Example
 
 ```go
-memory := NewMemoryStorage()
-dispatcher := NewDispatcher()
+import "github.com/goglue/eventmanager"
 
-var subscriber Subscriber = 1
-
-eventManager := NewEventManager(memory, dispatcher, nil)
-eventManager.Attach("randomEventName", subscriber)
-eventManager.Dispatch("randomEventName", "any value can be dispatched")
+func main(){
+        memory := eventmanager.NewMemoryStorage()
+        dispatcher := eventmanager.NewDispatcher()
+        
+        var subscriber Subscriber = 1
+        
+        evManager := eventmanager.NewEventManager(memory, dispatcher, nil)
+        evManager.Attach("randomEventName", subscriber)
+        evManager.Dispatch("randomEventName", "any value can be dispatched")
+}
 ```
 
 There is also another method to dispatch the event for the subscribers in go routines:
 
 ```go
-eventManager.GoDispatch("randomEventName", "any value can be dispatched")
+evManager.GoDispatch("randomEventName", "any value can be dispatched")
 ```
